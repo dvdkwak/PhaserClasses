@@ -82,6 +82,17 @@ var Fish = new Phaser.Class({
                       7, 7, 7, 7,
                       0, 0, 0, 0];
       }
+    }else
+    if(this.body.x <= this.walkArea.left){
+      directions = [1, 1, 1, 1,
+                    2, 2, 2, 2,
+                    3, 3, 3, 3,
+                    2, 2, 2, 2];
+    }else if(this.body.x >= this.walkArea.right){
+      directions = [5, 5, 5, 5,
+                    6, 6, 6, 6,
+                    7, 7, 7, 7,
+                    6, 6, 6, 6];
     }else{
       directions = [0, 0, 1, 1,
                     2, 2, 3, 3,
