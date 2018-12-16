@@ -9,10 +9,11 @@ var Fish = new Phaser.Class({
   {
     Sprite.call(this, scene, x, y, texture);
     this.setSize(32, 32);     // setting the standard size of an NPC
-    this.setSpeed(100);        // setting the standard speed of an NPC
+    this.setSpeed(100);       // setting the standard speed of an NPC
     this.isMoving = false;    // keeping track wether the NPC is moving or not
     this.i = 0;               // counter to keep track of number of events
-    this.setMoveLength(100);   // setting the standard length of moving in one direction
+    this.setMoveLength(100);  // setting the standard length of moving in one direction
+    this.getMoveLength();     // calling the getter to enable movement at start of the scene
     this.setIdleTime(100);    // time a fish has to wait before moving again
     console.log("\n Hello! \n I am an NPC!");
   },
@@ -34,6 +35,7 @@ var Fish = new Phaser.Class({
         this.isMoving = false;
         this.i = 0;
         this.idleTimer = 0;
+        this.getMoveLength();
       }
     }
   }, // end of update()
@@ -127,9 +129,23 @@ var Fish = new Phaser.Class({
     this.speed = s;
   },
 
-  setMoveLength: function(sl)
+  setMoveLength: function(sl, r = null, steps = null)
   {
-    this.moveLength = sl;
+    // when r is set, now the swimlength will be random between sl and r
+    if(r > sl){ // check if r is bigger than sl
+      this.moveLengthMax = r;
+      this.moveLengthMin = sl;
+      if(steps > 0){
+        this.moveSteps = steps;
+      }else{
+        this.moveSteps = 1;
+      }
+      this.moveLengthRandom = true;
+      return true;
+    }
+    this.moveLengthMin = sl;
+    this.moveLengthRandom = false;
+    return false;
   },
 
   setIdleTime: function(t)
@@ -141,6 +157,18 @@ var Fish = new Phaser.Class({
   stopMove: function()
   {
     this.body.setVelocity(0, 0);
+  },
+
+
+  // getters (some need a function to get the properties since you can set them to random)
+  getMoveLength: function()
+  {
+    if(this.moveLengthRandom){
+      this.moveLength = Math.floor(Math.random() * (this.moveLengthMax-this.moveLengthMin) + this.moveLengthMin)*this.moveSteps;
+    }else{
+      this.moveLength = this.moveLengthMin;
+    }
+    return this.moveLength;
   }
 
 });
