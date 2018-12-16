@@ -7,14 +7,16 @@ var Fish = new Phaser.Class({
 
   function Fish(scene, x, y, texture)
   {
-    Sprite.call(this, scene, x, y, texture);
-    this.setSize(32, 32);     // setting the standard size of an NPC
-    this.setSpeed(100);       // setting the standard speed of an NPC
-    this.isMoving = false;    // keeping track wether the NPC is moving or not
-    this.i = 0;               // counter to keep track of number of events
-    this.setMoveLength(100);  // setting the standard length of moving in one direction
-    this.getMoveLength();     // calling the getter to enable movement at start of the scene
-    this.setIdleTime(100);    // time a fish has to wait before moving again
+    Sprite.call(this, scene, x, y, texture); // calling the initialize of the Sprite class
+    this.setSize(32, 32);                    // setting the standard size of an NPC
+    this.setSpeed(100);                      // setting the standard speed of an NPC
+    this.isMoving = false;                   // keeping track wether the NPC is moving or not
+    this.i = 0;                              // counter to keep track of number of events
+    this.setMoveLength(100);                 // setting the standard length of moving in one direction
+    this.getMoveLength();                    // calling the getter to enable movement at start of the scene
+    this.setIdleTime(100);                   // time a fish has to wait before moving again
+    this.setWalkArea(320, 320, x, y);        // creating a default walk area for our NPC
+                                             // (scene, height and width of object times 10 and x and y of the object)
     console.log("\n Hello! \n I am an NPC!");
   },
 
@@ -45,26 +47,41 @@ var Fish = new Phaser.Class({
   newDirection: function()
   {
     let directions = []; // is gonna be a container for possible direction (8-dir system)
-    if(this.body.y <= this.body.height){
-      directions = [4, 4, 4, 4,
-                    4, 4, 4, 4,
-                    4, 4, 4, 4,
-                    4, 4, 4, 4];
-    }else if(this.body.y >= (window.innerHeight-this.body.height)){
-      directions = [0, 0, 0, 0,
-                    0, 0, 0, 0,
-                    0, 0, 0, 0,
-                    0, 0, 0, 0];
-    }else if(this.body.x <= this.body.width){
-      directions = [2, 2, 2, 2,
-                    2, 2, 2, 2,
-                    2, 2, 2, 2,
-                    2, 2, 2, 2];
-    }else if(this.body.x >= (window.innerWidth-this.body.width)){
-      directions = [6, 6, 6, 6,
-                    6, 6, 6, 6,
-                    6, 6, 6, 6,
-                    6, 6, 6, 6];
+    if(this.body.y <= this.walkArea.top){ // went North
+      if(this.body.x <= this.walkArea.left){
+        directions = [3, 3, 3, 3,
+                      3, 3, 3, 3,
+                      2, 2, 2, 2,
+                      4, 4, 4, 4];
+      }else if(this.body.x >= this.walkArea.right){
+        directions = [5, 5, 5, 5,
+                      5, 5, 5, 5,
+                      3, 3, 3, 3,
+                      4, 4, 4, 4];
+      }else{
+        directions = [3, 3, 3, 3,
+                      4, 4, 4, 4,
+                      5, 5, 5, 5,
+                      4, 4, 4, 4];
+      }
+    }else
+    if(this.body.y >= this.walkArea.bottom){ // went South
+      if(this.body.x <= this.walkArea.left){
+        directions = [1, 1, 1, 1,
+                      1, 1, 1, 1,
+                      2, 2, 2, 2,
+                      0, 0, 0, 0];
+      }else if(this.body.x >= this.walkArea.right){
+        directions = [7, 7, 7, 7,
+                      7, 7, 7, 7,
+                      0, 0, 0, 0,
+                      6, 6, 6, 6];
+      }else{
+        directions = [0, 0, 0, 0,
+                      1, 1, 1, 1,
+                      7, 7, 7, 7,
+                      0, 0, 0, 0];
+      }
     }else{
       directions = [0, 0, 1, 1,
                     2, 2, 3, 3,
@@ -157,6 +174,25 @@ var Fish = new Phaser.Class({
   stopMove: function()
   {
     this.body.setVelocity(0, 0);
+  },
+
+  setWalkArea: function(width, height, x = null, y = null)
+  {
+    // first remove old made sprites of the swimming area
+    if(typeof this.walkArea != "undefined"){
+      this.walkArea.destroy();
+    }
+
+    if(x && y){
+      this.walkArea = this.scene.physics.add.sprite(x, y).setSize(width, height);
+    }else{
+      this.walkArea = this.scene.physics.add.sprite(this.body.x, this.body.y).setSize(width, height);
+    }
+
+    this.walkArea.top = (this.walkArea.body.y - this.walkArea.body.height/2);
+    this.walkArea.bottom = (this.walkArea.body.y + this.walkArea.body.height/2);
+    this.walkArea.left = (this.walkArea.body.x - this.walkArea.body.width/2);
+    this.walkArea.right = (this.walkArea.body.x + this.walkArea.body.width/2);
   },
 
 
