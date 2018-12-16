@@ -211,7 +211,7 @@ var Fish = new Phaser.Class({
   getMoveLength: function()
   {
     if(this.moveLengthRandom){
-      this.moveLength = Math.floor(Math.random() * (this.moveLengthMax-this.moveLengthMin) + this.moveLengthMin)*this.moveSteps;
+      this.moveLength = Math.floor(Math.random() * ( 1 + (this.moveLengthMax-this.moveLengthMin) ) + this.moveLengthMin)*this.moveSteps;
     }else{
       this.moveLength = this.moveLengthMin;
     }
