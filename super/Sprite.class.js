@@ -9,7 +9,6 @@ var Sprite = new Phaser.Class({
   {
     Phaser.GameObjects.Sprite.call(this, scene, x, y, texture);
     scene.physics.world.enableBody(this);
-    this.body.setCollideWorldBounds(true);
   }
 
 });
