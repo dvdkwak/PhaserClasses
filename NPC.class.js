@@ -65,7 +65,7 @@ var NPC = new Phaser.Class({
       }else if(this.body.x >= this.walkArea.right){
         directions = [5, 5, 5, 5,
                       5, 5, 5, 5,
-                      3, 3, 3, 3,
+                      6, 6, 6, 6,
                       4, 4, 4, 4];
       }else{
         directions = [3, 3, 3, 3,
