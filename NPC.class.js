@@ -272,8 +272,6 @@ var NPC = new Phaser.Class({
     }else{
       this.idleTime = this.idleTimeMin;
     }
-    console.log("idleTime Min :" + this.idleTimeMin + ", idleTime Max: " + this.idleTimeMax + ", idleStep:" + this.idleSteps);
-    console.log("idleTime: " + this.idleTime);
     return this.idleTime;
   }
 
