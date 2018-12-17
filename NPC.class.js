@@ -47,6 +47,7 @@ var NPC = new Phaser.Class({
         this.i = 0;
         this.idleTimer = 0;
         this.getMoveLength();
+        this.getIdleTime();
       }
     }
   }, // end of update()
@@ -194,10 +195,23 @@ var NPC = new Phaser.Class({
     return false;
   },
 
-  setIdleTime: function(t)
+  setIdleTime: function(t, r = null, steps = null)
   {
-    this.idleTime  = t; // the time to be idle
-    this.idleTimer = t; // setting the idle timer default at the same value to prevent waiting at the start
+    // when r is set, now the idle timer will be random
+    if(r > t){
+      this.idleTimeMax = r;
+      this.idleTimeMin = t;
+      if(steps > 0){
+        this.idleSteps = steps;
+      }else{
+        this.idleSteps = 1;
+      }
+      this.idleTimeRandom = true;
+      return true;
+    }
+    this.idleTimeMin  = t; // the time to be idle
+    this.idleTimeRandom = false;
+    return false;
   },
 
   stopMove: function()
@@ -249,6 +263,18 @@ var NPC = new Phaser.Class({
       this.moveLength = this.moveLengthMin;
     }
     return this.moveLength;
+  },
+
+  getIdleTime: function()
+  {
+    if(this.idleTimeRandom){
+      this.idleTime = Math.floor(Math.random() * ( 1 + (this.idleTimeMax-this.idleTimeMin) ) + this.idleTimeMin)*this.idleSteps;
+    }else{
+      this.idleTime = this.idleTimeMin;
+    }
+    console.log("idleTime Min :" + this.idleTimeMin + ", idleTime Max: " + this.idleTimeMax + ", idleStep:" + this.idleSteps);
+    console.log("idleTime: " + this.idleTime);
+    return this.idleTime;
   }
 
 });
