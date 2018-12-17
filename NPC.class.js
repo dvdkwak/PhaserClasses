@@ -178,7 +178,7 @@ var Fish = new Phaser.Class({
 
   setIdleTime: function(t)
   {
-    this.idleTime = t; // the time to be idle
+    this.idleTime  = t; // the time to be idle
     this.idleTimer = t; // setting the idle timer default at the same value to prevent waiting at the start
   },
 
@@ -200,10 +200,10 @@ var Fish = new Phaser.Class({
       this.walkArea = this.scene.physics.add.sprite(this.body.x, this.body.y).setSize(width, height);
     }
 
-    this.walkArea.top = (this.walkArea.body.y - this.walkArea.body.height/2);
+    this.walkArea.top    = (this.walkArea.body.y - this.walkArea.body.height/2);
     this.walkArea.bottom = (this.walkArea.body.y + this.walkArea.body.height/2);
-    this.walkArea.left = (this.walkArea.body.x - this.walkArea.body.width/2);
-    this.walkArea.right = (this.walkArea.body.x + this.walkArea.body.width/2);
+    this.walkArea.left   = (this.walkArea.body.x - this.walkArea.body.width/2);
+    this.walkArea.right  = (this.walkArea.body.x + this.walkArea.body.width/2);
   },
 
 
