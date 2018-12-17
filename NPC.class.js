@@ -1,11 +1,11 @@
-var Fish = new Phaser.Class({
+var NPC = new Phaser.Class({
 
   Extends: Sprite,
 
 
   initialize:
 
-  function Fish(scene, x, y, texture)
+  function NPC(scene, x, y, texture)
   {
     Sprite.call(this, scene, x, y, texture); // calling the initialize of the Sprite class
     this.setSize(32, 32);                    // setting the standard size of an NPC
@@ -17,7 +17,16 @@ var Fish = new Phaser.Class({
     this.setIdleTime(100);                   // time a fish has to wait before moving again
     this.setWalkArea(320, 320, x, y);        // creating a default walk area for our NPC
                                              // (scene, height and width of object times 10 and x and y of the object)
-    console.log("\n Hello! \n I am an NPC!");
+    this.setWelcomeText("Hi!");              // setting a text and calling it in the console
+    this.setName("A random Dude");           // setting the name of this object (only used for speaking stuff)
+  },
+
+  create: function()
+  {
+    this.setSpawnText(                       // setting the text for when this NPC spawns
+"\n _______ " + this.name + " SPAWNED ______\n "); // (called later to enable use of this.name)
+    this.saySpawnText();
+    this.sayWelcomeText();
   },
 
   update: function()
@@ -142,6 +151,15 @@ var Fish = new Phaser.Class({
     return true;
   }, // end of move()
 
+  sayWelcomeText: function()
+  {
+    console.log(this.name + ": " + this.welcomeText);
+  },
+
+  saySpawnText: function()
+  {
+    console.log(this.spawnText);
+  },
 
 
 
@@ -204,6 +222,21 @@ var Fish = new Phaser.Class({
     this.walkArea.bottom = (this.walkArea.body.y + this.walkArea.body.height/2);
     this.walkArea.left   = (this.walkArea.body.x - this.walkArea.body.width/2);
     this.walkArea.right  = (this.walkArea.body.x + this.walkArea.body.width/2);
+  },
+
+  setWelcomeText: function(text)
+  {
+    this.welcomeText = text;
+  },
+
+  setName: function(name)
+  {
+    this.name = name;
+  },
+
+  setSpawnText: function(text)
+  {
+    this.spawnText = text;
   },
 
 
