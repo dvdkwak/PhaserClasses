@@ -5,10 +5,10 @@ var NPC = new Phaser.Class({
 
   initialize:
 
-  function NPC(scene, x, y, texture)
+  function NPC(scene, x, y, texture = null)
   {
     Sprite.call(this, scene, x, y, texture); // calling the initialize of the Sprite class
-    this.setSize(32, 32);                    // setting the standard size of an NPC
+    this.scene = scene;                      // now we can call scene everywhere! :D
     this.setSpeed(100);                      // setting the standard speed of an NPC
     this.isMoving = false;                   // keeping track wether the NPC is moving or not
     this.i = 0;                              // counter to keep track of number of events
@@ -19,6 +19,9 @@ var NPC = new Phaser.Class({
                                              // (scene, height and width of object times 10 and x and y of the object)
     this.setWelcomeText("Hi!");              // setting a text and calling it in the console
     this.setName("A random Dude");           // setting the name of this object (only used for speaking stuff)
+    if(texture === null){
+      this.setSize(32, 32);                  // setting the standard size of an NPC
+    }
   },
 
   create: function()
@@ -48,6 +51,7 @@ var NPC = new Phaser.Class({
         this.idleTimer = 0;
         this.getMoveLength();
         this.getIdleTime();
+        this.anims.play('idle-left');
       }
     }
   }, // end of update()
@@ -122,27 +126,95 @@ var NPC = new Phaser.Class({
 
     switch(dir){
       case 0:
+        this.anims.play('left');
         this.body.setVelocity(0, -this.speed); // North
         break;
       case 1:
+        if(this.moveAnimationRight){
+          if(this.isFlipped){
+            this.setFlipX(false);
+            this.isFlipped = false;
+          }
+          this.anims.play('right');
+        }else{
+          this.anims.play('left');
+          this.setFlipX(true);
+          this.isFlipped = true;
+        }
         this.body.setVelocity(this.speed, -this.speed); // North East
         break;
       case 2:
+        if(this.moveAnimationRight){
+          if(this.isFlipped){
+            this.setFlipX(false);
+            this.isFlipped = false;
+          }
+          this.anims.play('right');
+        }else{
+          this.anims.play('left');
+          this.setFlipX(true);
+          this.isFlipped = true;
+        }
         this.body.setVelocity(this.speed, 0); // East
         break;
       case 3:
+        if(this.moveAnimationRight){
+          if(this.isFlipped){
+            this.setFlipX(false);
+            this.isFlipped = false;
+          }
+          this.anims.play('right');
+        }else{
+          this.anims.play('left');
+          this.setFlipX(true);
+          this.isFlipped = true;
+        }
         this.body.setVelocity(this.speed, this.speed); // South East
         break;
       case 4:
+        this.anims.play('left');
         this.body.setVelocity(0, this.speed); // South
         break;
       case 5:
+        if(this.moveAnimationLeft){
+          if(this.isFlipped){
+            this.setFlipX(false);
+            this.isFlipped = false;
+          }
+          this.anims.play('left');
+        }else{
+          this.anims.play('right');
+          this.setFlipX(true);
+          this.isFlipped = true;
+        }
         this.body.setVelocity(-this.speed, this.speed); // South West
         break;
       case 6:
+        if(this.moveAnimationLeft){
+          if(this.isFlipped){
+            this.setFlipX(false);
+            this.isFlipped = false;
+          }
+          this.anims.play('left');
+        }else{
+          this.anims.play('right');
+          this.setFlipX(true);
+          this.isFlipped = true;
+        }
         this.body.setVelocity(-this.speed, 0); // West
         break;
       case 7:
+        if(this.moveAnimationLeft){
+          if(this.isFlipped){
+            this.setFlipX(false);
+            this.isFlipped = false;
+          }
+          this.anims.play('left');
+        }else{
+          this.anims.play('right');
+          this.setFlipX(true);
+          this.isFlipped = true;
+        }
         this.body.setVelocity(-this.speed, -this.speed); // North West
         break;
     }
@@ -251,6 +323,34 @@ var NPC = new Phaser.Class({
   setSpawnText: function(text)
   {
     this.spawnText = text;
+  },
+
+  setLeftMoveAnimation: function(config = null)
+  {
+    if(config != null){
+      this.moveAnimationLeft = true;
+      config.key = "left";
+      this.scene.anims.create(config);
+    }else{
+      this.moveAnimationLeft = false;
+    }
+  },
+
+  setRightMoveAnimation: function(config = null)
+  {
+    if(config != null){
+      this.moveAnimationRight = true;
+      config.key = "right";
+      this.scene.anims.create(config);
+    }else{
+      this.moveAnimationRight = false;
+    }
+  },
+
+  setLeftIdleAnimation: function(config = null)
+  {
+    config.key = "idle-left";
+    this.scene.anims.create(config);
   },
 
 
